@@ -1,3 +1,4 @@
+import java.awt.List;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,13 +14,19 @@ public class Reader {
 
 	public static HashMap<String, Integer> wordCount = new HashMap<>();
 	public static HashMap<Integer, ArrayList<String>> printable = new HashMap<>();
+	public static ArrayList<String> commonWords = new ArrayList<>();
+	private static BufferedReader in;
 	
 	public static void main(String[] args) throws InvalidPasswordException, IOException {
 		
 		ArrayList<PDDocument> documents = new ArrayList<>();
-		documents.add(PDDocument.load(new File("test1.pdf")));
-		documents.add(PDDocument.load(new File("test2.pdf")));
-		documents.add(PDDocument.load(new File("test3.pdf")));
+		documents.add(PDDocument.load(new File("2016 Exam.pdf")));
+		documents.add(PDDocument.load(new File("2015 Exam.pdf")));
+		documents.add(PDDocument.load(new File("2014 Exam.pdf")));
+		documents.add(PDDocument.load(new File("2013 Exam.pdf")));
+		documents.add(PDDocument.load(new File("2012 Exam.pdf")));
+		
+		populateDictionary();
 		
 		try{
 			for(int i = 0; i < documents.size(); i++){
@@ -40,13 +47,23 @@ public class Reader {
 		printWords(printable);
 	}
 	
+	public static void populateDictionary() throws IOException{
+		in = new BufferedReader(new FileReader("Common Word Dictionary.txt"));
+		String str;
+		while((str = in.readLine()) != null){
+		    commonWords.add(str);
+		}
+	}
+	
 	public static void mapWords(String input) throws FileNotFoundException{
 		String[] words = input.split("\\s+");
 		for(int i = 0; i < words.length; i++){
-			if(wordCount.containsKey(words[i])){
-				wordCount.put(words[i], wordCount.get(words[i])+1);
-			} else {
-				wordCount.put(words[i], 1);
+			if(!commonWords.contains(words[i])){
+				if(wordCount.containsKey(words[i])){
+					wordCount.put(words[i], wordCount.get(words[i])+1);
+				} else {
+					wordCount.put(words[i], 1);
+				}
 			}
 		}
 	}
