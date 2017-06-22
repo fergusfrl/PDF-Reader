@@ -1,26 +1,27 @@
 import java.io.File;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 public class Reader {
 
-	public static void main(String[] args) throws IOException {
-		try {
-		    PDDocument document = null;
-		    document = PDDocument.load(new File("C:/Users/Fergus/Documents/University 2017/COSC342 - Graphics/2016 Exam"));
-		    document.getClass();
-		    if (!document.isEncrypted()) {
-		        PDFTextStripperByArea stripper = new PDFTextStripperByArea();
-		        stripper.setSortByPosition(true);
-		        PDFTextStripper Tstripper = new PDFTextStripper();
-		        String st = Tstripper.getText(document);
-		        System.out.println("Text:" + st);
-		    }
-		} catch (Exception e) {
-		    e.printStackTrace();
+	public static void main(String[] args) {
+		String fileName = "2016 Exam.pdf";
+		try{
+			PDDocument doc = PDDocument.load(new File(fileName));
+			doc.getClass();
+			if(!doc.isEncrypted()){
+				PDFTextStripperByArea st = new PDFTextStripperByArea();
+				st.setSortByPosition(true);
+				PDFTextStripper Tstripper = new PDFTextStripper();
+				String str = Tstripper.getText(doc);
+				System.out.println(str);
+			}
+		} catch (IOException e){
+			System.out.println(e.getMessage());
 		}
 	}
-
+	
 }
