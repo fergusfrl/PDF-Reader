@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -27,11 +26,18 @@ public class Reader {
 					st.setSortByPosition(true);
 					PDFTextStripper Tstripper = new PDFTextStripper();
 					String str = Tstripper.getText(doc);
-					System.out.println(str);
+					splitWords(str);
 				}
 			}
 		} catch (IOException e){
 			System.out.println(e.getMessage());
+		}
+	}
+	
+	public static void splitWords(String input) throws FileNotFoundException{
+		String[] words = input.split("\\s+");
+		for(int i = 0; i < words.length; i++){
+			System.out.println(words[i]);
 		}
 	}
 	
