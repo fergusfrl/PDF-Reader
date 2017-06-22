@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
@@ -11,6 +12,7 @@ import org.apache.pdfbox.text.PDFTextStripperByArea;
 public class Reader {
 
 	public static HashMap<String, Integer> wordCount = new HashMap<>();
+	public static HashMap<Integer, ArrayList<String>> printable = new HashMap<>();
 	
 	public static void main(String[] args) throws InvalidPasswordException, IOException {
 		
@@ -34,8 +36,8 @@ public class Reader {
 		} catch (IOException e){
 			System.out.println(e.getMessage());
 		}
-		System.out.println(wordCount);
-		printWords(wordCount);
+		reMapWords(wordCount);
+		printWords(printable);
 	}
 	
 	public static void mapWords(String input) throws FileNotFoundException{
@@ -49,10 +51,25 @@ public class Reader {
 		}
 	}
 	
-	public static void printWords(HashMap<String, Integer> wordCount){
-		for(int i = Collections.max(wordCount.values()); i > 0; i--){
-			if(wordCount.containsValue(i)){
-				System.out.println(i);
+	public static void reMapWords(HashMap<String, Integer> wordCount){
+		for (Entry<String, Integer> entry : wordCount.entrySet()){
+			ArrayList<String> al = new ArrayList<>();
+
+			if(printable.containsKey(entry.getValue())){
+				printable.get(entry.getValue()).add(entry.getKey());
+			} else {
+				al.add(entry.getKey());
+				printable.put(entry.getValue(), al);
+			}
+		}
+	}
+	
+	public static void printWords(HashMap<Integer, ArrayList<String>> dic){
+		for(int i = Collections.max(dic.keySet()); i > 0; i--){
+			if(dic.containsKey(i)){
+				for(int j = 0; j < dic.get(i).size(); j++){
+					System.out.println(dic.get(i).get(j) + " - " + i);
+				}
 			}
 		}
 	}
